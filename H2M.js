@@ -1,12 +1,12 @@
-import TurndownService from "turndown";
-import { writeFile as _writeFile } from "fs";
-import request from "request";
-import { generate } from "random-ua";
-import { question } from "readline-sync";
+var TurndownService = require("turndown");
+var fs = require("fs");
+var request = require("request");
+var random_ua = require("random-ua");
+var readlineSync = require("readline-sync");
 
 var turdownService = new TurndownService();
 
-var url = question("Input Your URL：");
+var url = readlineSync.question("Input Your URL：");
 console.log("正在获取" + url);
 
 function gethtml(writeFile) {
@@ -15,7 +15,7 @@ function gethtml(writeFile) {
             method: "GET",
             charest: "utf-8",
             headers: {
-                "User-Agent": generate(),
+                "User-Agent": random_ua.generate(),
             },
         },
         function (err, response, body) {
@@ -39,7 +39,7 @@ function gethtml(writeFile) {
 function writeFile(file, title) {
     var markdown = turdownService.turndown(file);
     console.log("正在写入" + title);
-    _writeFile(title + ".md", markdown, (err) => {
+    fs.writeFile(title + ".md", markdown, (err) => {
         if (err) {
             console.log(err);
             return;
